@@ -2,8 +2,7 @@ package com.amare.notez.feature.application
 
 import android.app.Application
 import androidx.preference.PreferenceManager
-import com.amare.notez.util.ThemeManager
-import dagger.hilt.android.AndroidEntryPoint
+import com.amare.notez.util.Utils
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -15,6 +14,6 @@ class NotezApplication: Application() {
 
     private fun initTheme() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        ThemeManager.applyTheme(preferences.getString("preference_key_theme", "") ?: "")
+        Utils.applyTheme(preferences.getString("preference_key_theme", "") ?: "")
     }
 }

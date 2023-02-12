@@ -10,22 +10,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import com.amare.notez.R
 import com.amare.notez.core.domain.model.Response
 import com.amare.notez.databinding.FragmentLoginBinding
 import com.amare.notez.feature.homescreen.HomeActivity
+import com.amare.notez.util.Utils
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -37,10 +32,8 @@ class LoginFragment : Fragment() {
     private val viewModel by viewModels<LoginRegisterViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -49,40 +42,30 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupAction()
 
-
     }
 
     private fun setupAction() {
         binding.apply {
             googleLoginBtn.setOnClickListener {
-                signIn()
+                signInWithGoogle()
             }
 
             registerTextView.setOnClickListener {
                 val parentFragmentManager = this@LoginFragment.parentFragmentManager
                 val mRegisterFragment = RegisterFragment()
-                parentFragmentManager.beginTransaction()
-                    .replace(
+                parentFragmentManager.beginTransaction().replace(
                         R.id.login_register_frame,
                         mRegisterFragment,
                         RegisterFragment::class.java.simpleName
-                    )
-                    .addToBackStack(null).commit()
+                    ).addToBackStack(null).commit()
             }
         }
     }
 
-    private fun signIn() {
-        try {
-            val signInIntent = viewModel.signInClient.signInIntent
-            launcher.launch(signInIntent)
-        } catch (e: Exception) {
-            Log.d(TAG, "signIn: " + e.message)
-        }
+    private fun signInWithGoogle() {
+        val signInIntent = viewModel.signInClient.signInIntent
+        launcher.launch(signInIntent)
     }
-
-
-
 
     private var launcher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -97,32 +80,32 @@ class LoginFragment : Fragment() {
                     val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
                     val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                     viewModel.signInWithGoogle(credential)
-                    when (viewModel.googleResponse.value) {
-                        is Response.Loading -> Toast.makeText(
-                            requireContext(),
-                            "Loading",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        is Response.Success -> {
-                            Toast.makeText(requireContext(), viewModel.auth.currentUser?.email, Toast.LENGTH_LONG).show()
-                            startActivity(
-                                Intent(
-                                    requireContext(),
-                                    HomeActivity::class.java
+                    viewModel.googleResponse.observe(requireActivity()) { value ->
+                        when (value) {
+                            is Response.Loading -> {
+                                binding.apply {
+                                    Utils.showLoading(loadingView, loginLayout, true)
+                                }
+                            }
+                            is Response.Success -> {
+                                binding.apply {
+                                    Utils.showLoading(loadingView, loginLayout, false)
+                                }
+                                startActivity(
+                                    Intent(
+                                        requireContext(), HomeActivity::class.java
+                                    )
                                 )
-                            )
-                        }
-                        is Response.Error -> Toast.makeText(
-                            requireContext(),
-                            "Error",
-                            Toast.LENGTH_LONG
-                        ).show()
-
-                        else -> {
-
+                            }
+                            is Response.Error -> {
+                                binding.apply {
+                                    Utils.showLoading(loadingView, loginLayout, false)
+                                }
+                                Utils.showToastText(requireContext(), "Error", Toast.LENGTH_LONG)
+                            }
+                            else -> {}
                         }
                     }
-
                 } catch (e: ApiException) {
                     // Google Sign In failed, update UI appropriately
                     Log.w(TAG, "Google sign in failed", e)
@@ -131,11 +114,8 @@ class LoginFragment : Fragment() {
         }
 
 
-
-
     companion object {
         private const val TAG = "LoginFragment"
-        private const val RC_SIGN_IN = 1001
     }
 
 }

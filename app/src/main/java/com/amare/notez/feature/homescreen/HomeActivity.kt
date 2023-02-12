@@ -14,7 +14,6 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.centerText.text = intent.getStringExtra("LoginFragment")
 
     }
 }
