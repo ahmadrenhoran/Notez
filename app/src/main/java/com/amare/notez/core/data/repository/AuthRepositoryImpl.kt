@@ -2,6 +2,7 @@ package com.amare.notez.core.data.repository
 
 import android.util.Log
 import com.amare.notez.core.domain.model.Response
+import com.amare.notez.core.domain.model.User
 import com.amare.notez.core.domain.repository.AuthRepository
 import com.amare.notez.core.domain.repository.SignInWithGoogleResponse
 import com.amare.notez.util.Constants.SIGN_IN_REQUEST
@@ -35,11 +36,18 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun firebaseSignUpWithGoogle(
-        googleCredential: AuthCredential
-    ): SignInWithGoogleResponse {
+    override suspend fun firebaseSignInWithEmail(user: User): SignInWithGoogleResponse {
         return try {
-            auth.signInWithCredential(googleCredential).await()
+            auth.signInWithEmailAndPassword(user.email, user.password).await()
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Error(e)
+        }
+    }
+
+    override suspend fun firebaseSignUpWithEmail(user: User): SignInWithGoogleResponse {
+        return try {
+            auth.createUserWithEmailAndPassword(user.email, user.password).await()
             Response.Success(true)
         } catch (e: Exception) {
             Response.Error(e)

@@ -8,6 +8,7 @@ import com.amare.notez.core.domain.model.Response.Loading
 import com.amare.notez.core.domain.model.Response.Success
 import com.amare.notez.core.domain.repository.AuthRepository
 import com.amare.notez.core.domain.repository.SignInWithGoogleResponse
+import com.amare.notez.core.domain.usecase.NoteUseCases
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.AuthCredential
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginRegisterViewModel @Inject constructor(
-    private val repo: AuthRepository,
+    private val noteUseCases: NoteUseCases,
     val signInClient: GoogleSignInClient
 ): ViewModel() {
 
@@ -28,6 +29,6 @@ class LoginRegisterViewModel @Inject constructor(
 
     fun signInWithGoogle(googleCredential: AuthCredential) = viewModelScope.launch {
         _googleResponse.value = Loading
-        _googleResponse.value = repo.firebaseSignInWithGoogle(googleCredential)
+        _googleResponse.value = noteUseCases.signInWithGoogle.invoke(googleCredential)
     }
 }

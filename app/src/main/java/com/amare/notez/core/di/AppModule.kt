@@ -6,6 +6,9 @@ import android.content.Context
 import com.amare.notez.R
 import com.amare.notez.core.data.repository.AuthRepositoryImpl
 import com.amare.notez.core.domain.repository.AuthRepository
+import com.amare.notez.core.domain.usecase.NoteUseCases
+import com.amare.notez.core.domain.usecase.SignInWithEmail
+import com.amare.notez.core.domain.usecase.SignInWithGoogle
 import com.amare.notez.util.Constants.SIGN_IN_REQUEST
 import com.amare.notez.util.Constants.SIGN_UP_REQUEST
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -64,6 +67,11 @@ class AppModule {
         .requestIdToken(app.getString(R.string.default_web_client_id))
         .requestEmail()
         .build()
+
+    @Provides
+    fun provideNoteUseCases(
+        repository: AuthRepository
+    ) = NoteUseCases(SignInWithGoogle(repository), SignInWithEmail(repository))
 
     @Provides
     @Named(SIGN_IN_REQUEST)
