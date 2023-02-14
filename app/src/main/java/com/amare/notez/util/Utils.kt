@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import com.amare.notez.core.domain.model.User
+import com.google.firebase.auth.FirebaseUser
 import java.time.Duration
 
 object Utils {
@@ -32,6 +34,12 @@ object Utils {
         } else {
             loading.visibility = View.GONE
             layout.visibility = View.VISIBLE
+        }
+    }
+
+    fun toUser(user: FirebaseUser) : User {
+        user.apply {
+            return User(uid, displayName!!, email!!)
         }
     }
 }

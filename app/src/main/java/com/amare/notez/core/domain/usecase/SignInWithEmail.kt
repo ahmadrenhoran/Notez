@@ -5,6 +5,6 @@ import com.amare.notez.core.domain.repository.AuthRepository
 
 class SignInWithEmail(private val repository: AuthRepository) {
 
-    suspend operator fun invoke(user: User)  = repository.firebaseSignInWithEmail(user)
+    suspend operator fun invoke(user: User, password: String)  = repository.firebaseSignInWithEmail(user, password)
 
 }
