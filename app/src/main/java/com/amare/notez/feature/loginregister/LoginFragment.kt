@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.amare.notez.R
 import com.amare.notez.core.domain.model.Response
+import com.amare.notez.core.domain.model.User
 import com.amare.notez.databinding.FragmentLoginBinding
 import com.amare.notez.feature.homescreen.HomeActivity
 import com.amare.notez.util.Utils
@@ -50,6 +51,10 @@ class LoginFragment : Fragment() {
                 signInWithGoogle()
             }
 
+            loginButton.setOnClickListener {
+                signInWithEmail()
+            }
+
             registerTextView.setOnClickListener {
                 val parentFragmentManager = this@LoginFragment.parentFragmentManager
                 val mRegisterFragment = RegisterFragment()
@@ -58,6 +63,40 @@ class LoginFragment : Fragment() {
                         mRegisterFragment,
                         RegisterFragment::class.java.simpleName
                     ).addToBackStack(null).commit()
+            }
+        }
+    }
+
+    private fun signInWithEmail() {
+        binding.apply {
+            val user = User(email = emailEditText.text.toString())
+            viewModel.signInWithEmail(user, passwordEditText.text.toString())
+        }
+        viewModel.emailResponse.observe(requireActivity()) { value ->
+            when (value) {
+                is Response.Loading -> {
+                    binding.apply {
+                        Utils.showLoading(loadingView, loginLayout, true)
+                    }
+                }
+                is Response.Success -> {
+                    binding.apply {
+                        Utils.showLoading(loadingView, loginLayout, false)
+                    }
+                    startActivity(
+                        Intent(
+                            requireContext(), HomeActivity::class.java
+                        )
+                    )
+                    activity?.finish()
+                }
+                is Response.Error -> {
+                    binding.apply {
+                        Utils.showLoading(loadingView, loginLayout, false)
+                    }
+                    Utils.showToastText(requireContext(), value.e.toString(), Toast.LENGTH_LONG)
+                }
+                else -> {}
             }
         }
     }
@@ -96,12 +135,13 @@ class LoginFragment : Fragment() {
                                         requireContext(), HomeActivity::class.java
                                     )
                                 )
+                                activity?.finish()
                             }
                             is Response.Error -> {
                                 binding.apply {
                                     Utils.showLoading(loadingView, loginLayout, false)
                                 }
-                                Utils.showToastText(requireContext(), "Error", Toast.LENGTH_LONG)
+                                Utils.showToastText(requireContext(), value.e.toString(), Toast.LENGTH_LONG)
                             }
                             else -> {}
                         }

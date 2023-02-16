@@ -6,14 +6,57 @@
     android:layout_height="match_parent"
     tools:context=".feature.homescreen.HomeActivity">
 
-    <TextView
-        android:id="@+id/center_Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ths is homescreen"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_margin="8dp"
+        android:elevation="8dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/toolbar_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_person_white" />
+
+        <TextView
+            android:id="@+id/text_view_username"
+            android:paddingLeft="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:text="@string/welcome"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:layout_marginRight="16dp"
+            android:layout_gravity="end"
+            android:id="@+id/img_view_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@null"
+            android:src="@drawable/ic_setting_white" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:id="@+id/fab_create_note"
+        android:layout_marginEnd="12dp"
+        style="@style/floatActionButton"
+        android:layout_marginBottom="12dp"
+        app:backgroundTint="?attr/colorPrimary"
+        app:tint="@color/white"
+        android:src="@drawable/ic_add_white"
+        android:elevation="12dp"
+        app:rippleColor="@color/white"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

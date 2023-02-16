@@ -33,6 +33,26 @@ class LoginRegisterViewModel @Inject constructor(
     val  emailResponse: LiveData<SignInWithGoogleResponse>
         get() = _emailResponse
 
+    private val _userName = MutableLiveData<String>()
+    val userName: LiveData<String>
+        get() = _userName
+
+    private val _emailUser = MutableLiveData<String>()
+    val emailUser: LiveData<String>
+        get() = _emailUser
+
+    private val _passwordUser = MutableLiveData<String>()
+    val passwordUser: LiveData<String>
+        get() = _passwordUser
+
+    private val _isFormValid = MutableLiveData<Boolean>()
+    val isFormValid: LiveData<Boolean>
+        get() = _isFormValid
+
+    init {
+        _isFormValid.value = false
+    }
+
     fun signInWithGoogle(googleCredential: AuthCredential) = viewModelScope.launch {
         _googleResponse.value = Loading
         _googleResponse.value = noteUseCases.signInWithGoogle.invoke(googleCredential)
@@ -47,4 +67,24 @@ class LoginRegisterViewModel @Inject constructor(
         _emailResponse.value = Loading
         _emailResponse.value = noteUseCases.signUpWithEmail.invoke(user, password)
     }
+
+    fun setUserName(userName: String) {
+        _userName.value = userName
+    }
+
+    fun setEmailUser(emailUser: String) {
+        _emailUser.value = emailUser
+    }
+
+    fun setPasswordUser(password: String) {
+        _passwordUser.value = password
+    }
+
+    fun setFormValid(bool: Boolean) {
+        _isFormValid.value = bool
+    }
+
+
+
+
 }

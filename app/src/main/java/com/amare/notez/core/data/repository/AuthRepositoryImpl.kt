@@ -1,5 +1,6 @@
 package com.amare.notez.core.data.repository
 
+import android.util.Log
 import com.amare.notez.core.domain.model.Response
 import com.amare.notez.core.domain.model.User
 import com.amare.notez.core.domain.repository.AuthRepository
@@ -8,6 +9,7 @@ import com.amare.notez.util.Utils
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -48,6 +50,10 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun firebaseSignUpWithEmail(user: User, password: String): SignInWithGoogleResponse {
         return try {
             auth.createUserWithEmailAndPassword(user.email, password).await()
+            val profileUpdates = userProfileChangeRequest {
+                displayName = user.name
+            }
+            auth.currentUser!!.updateProfile(profileUpdates).await()
             addUserToDatabase()
             Response.Success(true)
         } catch (e: Exception) {
@@ -61,6 +67,10 @@ class AuthRepositoryImpl @Inject constructor(
             val user = Utils.toUser(this)
             usersRef.child(user.id).setValue(user).await()
         }
+    }
+
+    companion object {
+        private const val TAG = "AuthRepositoryImpl"
     }
 
 }
