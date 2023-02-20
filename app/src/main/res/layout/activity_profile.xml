@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature.setting.SettingActivity">
+    android:padding="8dp"
+    tools:context=".feature.profile.ProfileActivity">
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

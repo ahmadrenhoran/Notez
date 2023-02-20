@@ -1,26 +1,24 @@
 package com.amare.notez.core.data.repository
 
-import android.util.Log
+import com.amare.notez.core.domain.model.Note
 import com.amare.notez.core.domain.model.Response
 import com.amare.notez.core.domain.model.User
-import com.amare.notez.core.domain.repository.AuthRepository
-import com.amare.notez.core.domain.repository.SignInWithGoogleResponse
+import com.amare.notez.core.domain.repository.*
 import com.amare.notez.util.Utils
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-import javax.inject.Singleton
 
 
-@Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val db: FirebaseDatabase,
-) : AuthRepository {
+) : AuthRepository, NoteRepository {
+
+    private val notesRef = db.reference.child("notes")
 
     override suspend fun firebaseSignInWithGoogle(
         googleCredential: AuthCredential
@@ -31,6 +29,7 @@ class AuthRepositoryImpl @Inject constructor(
             if (isNewUser) {
                 addUserToDatabase()
             }
+
 
             Response.Success(true)
         } catch (e: Exception) {
@@ -68,6 +67,44 @@ class AuthRepositoryImpl @Inject constructor(
             usersRef.child(user.id).setValue(user).await()
         }
     }
+
+    override suspend fun getNotes(userId: String): NotesResponse {
+        return try {
+            Response.Success(ArrayList())
+        } catch (e: Exception) {
+            Response.Error(e)
+        }
+    }
+
+    override suspend fun createNote(userId: String, note: Note): NoteResponse {
+        return try {
+            val newNoteRef = notesRef.child(userId).push()
+            note.id = newNoteRef.key.toString()
+            newNoteRef.setValue(note)
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Error(e)
+        }
+    }
+
+    override suspend fun updateNote(userId: String, note: Note): NoteResponse {
+        return try {
+            notesRef.child(userId).child(note.id).setValue(note).await()
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Error(e)
+        }
+    }
+
+    override suspend fun deleteNoteById(userId: String, noteId: String): NoteResponse {
+        return try {
+            notesRef.child(userId).child(noteId).removeValue()
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Error(e)
+        }
+    }
+
 
     companion object {
         private const val TAG = "AuthRepositoryImpl"

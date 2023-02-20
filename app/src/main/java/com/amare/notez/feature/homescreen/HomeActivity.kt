@@ -6,8 +6,7 @@ import android.os.Bundle
 import com.amare.notez.R
 import com.amare.notez.databinding.ActivityHomeBinding
 import com.amare.notez.feature.createnote.CreateNoteActivity
-import com.amare.notez.feature.loginregister.LoginFragment
-import com.amare.notez.feature.setting.SettingActivity
+import com.amare.notez.feature.profile.ProfileActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,12 +27,15 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupAction() {
         binding.apply {
-            imgViewSetting.setOnClickListener {
-                startActivity(
-                    Intent(
-                        this@HomeActivity, SettingActivity::class.java
-                    )
-                )
+            val intent = Intent(
+                this@HomeActivity, ProfileActivity::class.java
+            )
+            imgViewProfilePicture.setOnClickListener {
+                startActivity(intent)
+            }
+
+            textViewUsername.setOnClickListener {
+                startActivity(intent)
             }
 
             fabCreateNote.setOnClickListener {

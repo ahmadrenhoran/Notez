@@ -11,4 +11,6 @@
     <string name="hello_again">Hello \nAgain!</string>
     <string name="email_address">Email Address</string>
     <string name="welcome">Welcome!, %s</string>
+    <string name="setting">Setting</string>
+    <string name="profile">Profile</string>
 </resources>

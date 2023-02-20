@@ -6,10 +6,7 @@ import android.content.Context
 import com.amare.notez.R
 import com.amare.notez.core.data.repository.AuthRepositoryImpl
 import com.amare.notez.core.domain.repository.AuthRepository
-import com.amare.notez.core.domain.usecase.NoteUseCases
-import com.amare.notez.core.domain.usecase.SignInWithEmail
-import com.amare.notez.core.domain.usecase.SignInWithGoogle
-import com.amare.notez.core.domain.usecase.SignUpWithEmail
+import com.amare.notez.core.domain.usecase.*
 import com.amare.notez.util.Constants.SIGN_IN_REQUEST
 import com.amare.notez.util.Constants.SIGN_UP_REQUEST
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -43,7 +40,7 @@ class AppModule {
     fun provideAuthRepository(
         auth: FirebaseAuth,
         db: FirebaseDatabase
-    ): AuthRepository = AuthRepositoryImpl(
+    ): AuthRepositoryImpl = AuthRepositoryImpl(
         auth = auth,
         db = db
     )
@@ -70,11 +67,14 @@ class AppModule {
 
     @Provides
     fun provideNoteUseCases(
-        repository: AuthRepository
+        repository: AuthRepositoryImpl
     ) = NoteUseCases(
         SignInWithGoogle(repository),
         SignInWithEmail(repository),
-        SignUpWithEmail(repository)
+        SignUpWithEmail(repository),
+        CreateNote(repository),
+        UpdateNote(repository),
+        DeleteNoteById(repository),
     )
 
 
