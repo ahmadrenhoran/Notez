@@ -13,4 +13,7 @@
     <string name="welcome">Welcome!, %s</string>
     <string name="setting">Setting</string>
     <string name="profile">Profile</string>
+    <string name="title">Title</string>
+    <string name="note">Note</string>
+    <string name="edited">Edited %s</string>
 </resources>

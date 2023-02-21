@@ -30,15 +30,29 @@
             android:tooltipText="Navigate back"
             app:tint="?attr/colorPrimary" />
 
-        <!--        <TextView-->
-        <!--            android:paddingTop="4dp"-->
-        <!--            android:id="@+id/text_view_username"-->
-        <!--            android:paddingLeft="8dp"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:fontFamily="@font/poppins_regular"-->
-        <!--            android:text="@string/welcome"-->
-        <!--            android:textColor="?attr/colorPrimary" />-->
+        <TextView
+            android:id="@+id/text_view_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:paddingLeft="8dp"
+            android:paddingTop="4dp"
+            android:text="@string/edited"
+            android:textColor="?attr/colorPrimary" />
+
+        <ImageView
+            android:id="@+id/img_view_delete"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/circular_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:src="@drawable/ic_delete"
+            android:tooltipText="Delete"
+            app:tint="?attr/colorPrimary" />
 
         <ImageView
             android:id="@+id/img_view_pin"
@@ -49,7 +63,7 @@
             android:background="@drawable/circular_bg"
             android:clickable="true"
             android:focusable="true"
-            android:padding="4dp"
+            android:padding="6dp"
             android:src="@drawable/ic_pin"
             android:tooltipText="Pin"
             app:tint="?attr/colorPrimary" />
@@ -57,20 +71,22 @@
     </androidx.appcompat.widget.Toolbar>
 
     <EditText
+        android:id="@+id/title_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimaryVariant"
         android:ems="10"
         android:fontFamily="@font/poppins_regular"
-        android:hint="Title"
+        android:hint="@string/title"
         android:textSize="24sp" />
 
     <EditText
+        android:id="@+id/note_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimaryVariant"
         android:ems="10"
-        android:hint="Note" />
+        android:hint="@string/note" />
 
 
 </LinearLayout>

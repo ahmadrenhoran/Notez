@@ -6,7 +6,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import com.amare.notez.core.domain.model.User
 import com.google.firebase.auth.FirebaseUser
-import java.time.Duration
+import java.text.DateFormat
+import java.text.DateFormat.getDateTimeInstance
+import java.util.*
 import java.util.regex.Pattern
 
 object Utils {
@@ -58,4 +60,20 @@ object Utils {
 
         return true
     }
+
+
+    fun getTimeDate(timestamp: Long): String? {
+        return try {
+            val dateFormat: DateFormat = getDateTimeInstance()
+            val netDate = Date(timestamp)
+            dateFormat.format(netDate)
+        } catch (e: Exception) {
+            "date"
+        }
+    }
+
+
+
+
+
 }

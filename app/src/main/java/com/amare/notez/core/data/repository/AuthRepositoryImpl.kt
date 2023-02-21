@@ -9,6 +9,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -80,7 +81,10 @@ class AuthRepositoryImpl @Inject constructor(
         return try {
             val newNoteRef = notesRef.child(userId).push()
             note.id = newNoteRef.key.toString()
+            val map: MutableMap<String, Any> = HashMap()
+            map.put("edited", ServerValue.TIMESTAMP)
             newNoteRef.setValue(note)
+            newNoteRef.updateChildren(map).await()
             Response.Success(true)
         } catch (e: Exception) {
             Response.Error(e)
@@ -89,7 +93,12 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun updateNote(userId: String, note: Note): NoteResponse {
         return try {
-            notesRef.child(userId).child(note.id).setValue(note).await()
+            val noteRef = notesRef.child(userId).child(note.id)
+
+            val map: MutableMap<String, Any> = HashMap()
+            map.put("edited", ServerValue.TIMESTAMP)
+            noteRef.setValue(note)
+            noteRef.updateChildren(map).await()
             Response.Success(true)
         } catch (e: Exception) {
             Response.Error(e)
@@ -98,7 +107,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun deleteNoteById(userId: String, noteId: String): NoteResponse {
         return try {
-            notesRef.child(userId).child(noteId).removeValue()
+            notesRef.child(userId).child(noteId).removeValue().await()
             Response.Success(true)
         } catch (e: Exception) {
             Response.Error(e)
