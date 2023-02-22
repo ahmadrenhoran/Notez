@@ -7,9 +7,11 @@ import com.amare.notez.core.domain.repository.*
 import com.amare.notez.util.Utils
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ServerValue
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -17,9 +19,17 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private val db: FirebaseDatabase,
-) : AuthRepository, NoteRepository {
+) : AuthRepository, NoteRepository, ProfileRepository {
 
     private val notesRef = db.reference.child("notes")
+    override val user: User
+        get() = User(
+            id = Firebase.auth.currentUser?.uid!!,
+            name = Firebase.auth.currentUser?.displayName!!,
+            email = Firebase.auth.currentUser?.email!!,
+            photoUrl = Firebase.auth.currentUser?.photoUrl.toString(),
+        )
+
 
     override suspend fun firebaseSignInWithGoogle(
         googleCredential: AuthCredential
@@ -38,7 +48,10 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun firebaseSignInWithEmail(user: User, password: String): SignInWithGoogleResponse {
+    override suspend fun firebaseSignInWithEmail(
+        user: User,
+        password: String
+    ): SignInWithGoogleResponse {
         return try {
             auth.signInWithEmailAndPassword(user.email, password).await()
             Response.Success(true)
@@ -47,7 +60,10 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun firebaseSignUpWithEmail(user: User, password: String): SignInWithGoogleResponse {
+    override suspend fun firebaseSignUpWithEmail(
+        user: User,
+        password: String
+    ): SignInWithGoogleResponse {
         return try {
             auth.createUserWithEmailAndPassword(user.email, password).await()
             val profileUpdates = userProfileChangeRequest {
@@ -66,14 +82,6 @@ class AuthRepositoryImpl @Inject constructor(
         auth.currentUser?.apply {
             val user = Utils.toUser(this)
             usersRef.child(user.id).setValue(user).await()
-        }
-    }
-
-    override suspend fun getNotes(userId: String): NotesResponse {
-        return try {
-            Response.Success(ArrayList())
-        } catch (e: Exception) {
-            Response.Error(e)
         }
     }
 
@@ -114,6 +122,29 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+
+    override suspend fun signOut(): SignOutResponse {
+        return try {
+            auth.signOut()
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Error(e)
+        }
+    }
+
+    override suspend fun revokeAccess(): RevokeAccessResponse {
+        return try {
+            auth.signOut()
+            auth.currentUser?.apply {
+                notesRef.child(uid).removeValue().await()
+                db.getReference("users").child(uid).removeValue().await()
+                delete().await()
+            }
+            Response.Success(true)
+        } catch (e: Exception) {
+            Response.Error(e)
+        }
+    }
 
     companion object {
         private const val TAG = "AuthRepositoryImpl"

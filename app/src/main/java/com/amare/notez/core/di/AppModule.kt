@@ -5,11 +5,7 @@ import android.app.Application
 import android.content.Context
 import com.amare.notez.R
 import com.amare.notez.core.data.repository.AuthRepositoryImpl
-import com.amare.notez.core.domain.repository.AuthRepository
 import com.amare.notez.core.domain.usecase.*
-import com.amare.notez.util.Constants.SIGN_IN_REQUEST
-import com.amare.notez.util.Constants.SIGN_UP_REQUEST
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -23,7 +19,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Named
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -75,6 +70,9 @@ class AppModule {
         CreateNote(repository),
         UpdateNote(repository),
         DeleteNoteById(repository),
+        SignOut(repository),
+        RevokeAccess(repository),
+        GetUser(repository),
     )
 
 

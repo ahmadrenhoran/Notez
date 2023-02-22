@@ -86,6 +86,8 @@ class CreateNoteActivity : AppCompatActivity() {
             imgViewDelete.setOnClickListener {
                 showDeleteConfirmationDialog()
             }
+
+            binding.textViewEdit.setText(String.format(resources.getString(R.string.edited), Utils.getTimeDate(note.edited)))
         }
 
         viewModel.deleteResponse.observe(this) { value ->

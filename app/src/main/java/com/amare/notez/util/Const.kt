@@ -23,4 +23,12 @@ object Constants {
 
     // Intent
     const val PASSING_DATA_NOTE = "passingDataNote"
+
+    //Theme
+    const val CURRENT_THEME = "preference_key_theme"
+
+    const val LIGHT_MODE = "Light"
+    const val DARK_MODE = "Dark"
+    const val AUTO_BATTERY_MODE = "Auto-battery"
+    const val FOLLOW_SYSTEM_MODE = "System"
 }

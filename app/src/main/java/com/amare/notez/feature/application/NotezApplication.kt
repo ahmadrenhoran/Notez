@@ -1,7 +1,10 @@
 package com.amare.notez.feature.application
 
 import android.app.Application
+import android.content.Context
+import android.util.Log
 import androidx.preference.PreferenceManager
+import com.amare.notez.util.Constants
 import com.amare.notez.util.Utils
 import dagger.hilt.android.HiltAndroidApp
 
@@ -13,7 +16,8 @@ class NotezApplication: Application() {
     }
 
     private fun initTheme() {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        Utils.applyTheme(preferences.getString("preference_key_theme", "") ?: "")
+        val preferences = getSharedPreferences(Constants.CURRENT_THEME, Context.MODE_PRIVATE)
+        preferences.getString(Constants.CURRENT_THEME, Constants.FOLLOW_SYSTEM_MODE)
+            ?.let { Utils.applyTheme(it, this) }
     }
 }

@@ -4,10 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
+    android:padding="12dp"
     tools:context=".feature.profile.ProfileActivity">
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/logout_button"
+        style="@style/buttonCustom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:shadowRadius="0"
+        android:stateListAnimator="@null"
+        android:text="Log out"
+        android:backgroundTint="@color/red"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/revoke_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:rippleColor="@color/white" />
 
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/revoke_button"
+        style="@style/buttonCustom"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:shadowRadius="0"
+        android:stateListAnimator="@null"
+        android:text="Revoke Account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:rippleColor="@color/white" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

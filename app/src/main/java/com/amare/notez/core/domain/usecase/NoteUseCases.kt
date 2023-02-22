@@ -7,4 +7,7 @@ data class NoteUseCases(
     val createNote: CreateNote,
     val updateNote: UpdateNote,
     val deleteNoteById: DeleteNoteById,
+    val signOut: SignOut,
+    val revokeAccess: RevokeAccess,
+    val getUser: GetUser,
 )
