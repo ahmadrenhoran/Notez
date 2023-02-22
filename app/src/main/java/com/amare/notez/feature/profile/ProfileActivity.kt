@@ -3,13 +3,16 @@ package com.amare.notez.feature.profile
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.amare.notez.core.domain.model.Response
 import com.amare.notez.databinding.ActivityProfileBinding
 import com.amare.notez.feature.loginregister.LoginRegisterActivity
 import com.amare.notez.util.Utils
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
     private val viewModel by viewModels<ProfileViewModel>()
@@ -25,6 +28,7 @@ class ProfileActivity : AppCompatActivity() {
                         is Response.Loading -> {}
                         is Response.Success -> {
                             if (value.data == true) {
+                                Log.d(TAG, "onCreate: " + "signOut")
                                 startActivity(Intent(this@ProfileActivity, LoginRegisterActivity::class.java))
                                 finish()
                             }
@@ -40,6 +44,7 @@ class ProfileActivity : AppCompatActivity() {
                         is Response.Loading -> {}
                         is Response.Success -> {
                             if (value.data == true) {
+                                Log.d(TAG, "onCreate: " + "signOut")
                                 startActivity(Intent(this@ProfileActivity, LoginRegisterActivity::class.java))
                                 finish()
                             }
@@ -49,5 +54,9 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "ProfileActivity"
     }
 }
