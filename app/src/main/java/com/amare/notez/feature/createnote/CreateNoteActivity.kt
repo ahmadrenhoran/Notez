@@ -29,6 +29,8 @@ class CreateNoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateNoteBinding
     private val viewModel by viewModels<CreateNoteViewModel>()
     private var isOldNote = false
+    private var isPinned = false
+    private var isDiscarded = false
     private lateinit var note: Note
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -46,6 +48,7 @@ class CreateNoteActivity : AppCompatActivity() {
             getNote.apply {
                 this@CreateNoteActivity.note = Note(id, title, note, edited, pinned)
             }
+            isPinned = note.pinned
             lifecycleScope.launch {
                 isOldNote = viewModel.isDataExist(Firebase.auth.currentUser?.uid!!, note.id)
                 if (isOldNote) {
@@ -155,13 +158,13 @@ class CreateNoteActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        if (!isOldNote) {
+        if (!isOldNote && binding.titleEditText.text.toString().trim() != "" && binding.noteEditText.text.toString().trim() != "") {
             createNote()
         } else {
             binding.apply {
                 // untuk mengecek apakah ada perubahan, jika tidak jangan di update
                 if (!titleEditText.text.toString().trim()
-                        .equals(note.title) || !noteEditText.text.toString().trim().equals(note.note)
+                        .equals(note.title) || !noteEditText.text.toString().trim().equals(note.note) || (note.pinned != isPinned)
                 ) {
                     updateNote()
                 }

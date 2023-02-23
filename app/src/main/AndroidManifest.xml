@@ -46,13 +46,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.splashscreen.SplashScreenActivity"
-            android:exported="true" >
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".feature.homescreen.HomeActivity"
             android:exported="true"
             android:theme="@style/Theme.Notez" >

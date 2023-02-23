@@ -134,12 +134,13 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun revokeAccess(): RevokeAccessResponse {
         return try {
-            auth.signOut()
             auth.currentUser?.apply {
                 notesRef.child(uid).removeValue().await()
                 db.getReference("users").child(uid).removeValue().await()
                 delete().await()
             }
+
+            auth.signOut()
             Response.Success(true)
         } catch (e: Exception) {
             Response.Error(e)
