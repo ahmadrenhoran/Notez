@@ -27,7 +27,7 @@ Untuk menggunakan aplikasi ini, pastikan kamu sudah memiliki akun Firebase dan s
 <h3>Depedensi</h3>
 Aplikasi ini menggunakan beberapa dependensi berikut:
 
-Firebase Realtime Database
-Firebase Authentication
-Dagger-Hilt
-Lottie
+- Firebase Realtime Database
+- Firebase Authentication
+- Dagger-Hilt
+- Lottie
