@@ -8,6 +8,7 @@
 - Melihat detail catatan
 - Mengedit catatan
 - Menghapus catatan
+- Mengganti tema
 - Login & Register
 - Logout & Revoke akun
 
