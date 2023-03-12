@@ -30,5 +30,6 @@ Aplikasi ini menggunakan beberapa dependensi berikut:
 
 - Firebase Realtime Database
 - Firebase Authentication
+- LiveData & ViewModel
 - Dagger-Hilt
 - Lottie
