@@ -1,3 +1,4 @@
+![Notez](https://github.com/ahmadrenhoran/Notez/assets/85774373/a08b1cc6-486b-4a8c-9bdd-c494d6ad8a4a)
 <h1>Aplikasi Notez</h1>
 <p>Aplikasi Catatan Harian adalah sebuah aplikasi sederhana untuk menyimpan catatan harian. Aplikasi ini dikembangkan dengan menggunakan bahasa Kotlin dan database Firebase Realtime Database dan Firebase Authentication serta menerapkan Clean Architecture. </p>
 
@@ -5,6 +6,7 @@
 
 - Membuat catatan baru
 - Menampilkan daftar catatan
+
 - Melihat detail catatan
 - Mengedit catatan
 - Menghapus catatan
